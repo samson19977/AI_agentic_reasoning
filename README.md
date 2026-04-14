@@ -2,33 +2,7 @@
 
 An end-to-end, multi-agent research system that autonomously searches, synthesizes, evaluates, and reports on complex research questions — built with FastAPI, Next.js, and state-of-the-art LLMs.
 
----
 
-## 🧠 How It Works
-
-Each research question passes through **four sequential agents**:
-
-```mermaid
-flowchart LR
-    Q([Research<br/> Question])
-    S[Search<br/> Agent]
-    SY[Synthesis<br/> Agent]
-    R[Report<br/> Agent]
-    E[Evaluator]
-    O([Scored<br/> Report])
-
-    Q --> S
-    S --> SY
-    SY --> R
-    R --> E
-    E --> O
-
-    S:::stage
-    SY:::stage
-    R:::stage
-    E:::stage
-
-    classDef stage fill:#0d7c7c,color:#fff,stroke:none
 ml-ess/
 ├── api/                        # Python backend
 │   ├── main.py                 # Uvicorn entry point & CLI
