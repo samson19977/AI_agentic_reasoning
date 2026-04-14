@@ -1,0 +1,354 @@
+\documentclass[aspectratio=169, 10pt]{beamer}
+
+% ── Encoding & fonts ──────────────────────────────────────────────────────────
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% ── Math ──────────────────────────────────────────────────────────────────────
+\usepackage{amsmath, amssymb}
+
+% ── Graphics & colour ─────────────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc}
+
+% ── Tables ────────────────────────────────────────────────────────────────────
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+
+% ── Code listings ─────────────────────────────────────────────────────────────
+\usepackage{listings}
+
+% ── Misc ──────────────────────────────────────────────────────────────────────
+\usepackage{hyperref}
+
+% =============================================================================
+%  COLOURS  (mirror report.tex palette)
+% =============================================================================
+\definecolor{aims-blue}{RGB}{0, 70, 127}
+\definecolor{aims-teal}{RGB}{13, 124, 124}
+\definecolor{aims-green}{RGB}{39, 174, 96}
+\definecolor{aims-red}{RGB}{231, 76, 60}
+\definecolor{aims-purple}{RGB}{142, 68, 173}
+\definecolor{aims-orange}{RGB}{211, 84, 0}
+\definecolor{aims-lblue}{RGB}{41, 128, 185}
+\definecolor{code-bg}{RGB}{240, 244, 248}
+\definecolor{code-red}{RGB}{192, 57, 43}
+
+% =============================================================================
+%  BEAMER THEME
+% =============================================================================
+\usetheme{default}
+\usecolortheme{default}
+
+% Colours
+\setbeamercolor{normal text}{fg=black!85}
+\setbeamercolor{structure}{fg=aims-blue}
+\setbeamercolor{frametitle}{fg=white, bg=aims-blue}
+\setbeamercolor{title}{fg=white, bg=aims-blue}
+\setbeamercolor{block title}{fg=white, bg=aims-teal}
+\setbeamercolor{block body}{fg=black!85, bg=aims-teal!8}
+\setbeamercolor{alerted text}{fg=aims-teal}
+\setbeamercolor{item}{fg=aims-blue}
+\setbeamercolor{subitem}{fg=aims-teal}
+\setbeamercolor{footline}{fg=white, bg=aims-blue}
+
+% Fonts
+\setbeamerfont{title}{size=\LARGE, series=\bfseries}
+\setbeamerfont{frametitle}{size=\large, series=\bfseries}
+\setbeamerfont{block title}{size=\small, series=\bfseries}
+\setbeamerfont{footline}{size=\tiny}
+
+% Frametitle: thin teal rule below the bar
+\setbeamertemplate{frametitle}{%
+  \vspace{0.25em}\insertframetitle%
+  \ifx\insertframesubtitle\empty\else
+    \\[0.05em]{\small\color{aims-teal!70!white}\insertframesubtitle}%
+  \fi%
+}
+
+% No navigation icons
+\setbeamertemplate{navigation symbols}{}
+
+% Footer: project name left, slide counter right
+\setbeamertemplate{footline}{%
+  \begin{beamercolorbox}[wd=\paperwidth, ht=2.2ex, dp=1ex]{footline}%
+    \hspace{1em}%
+    AIMS RIC \textbullet\ DTS 2026 \textbullet\ ML-ESS%
+    \hfill%
+    \insertframenumber\,/\,\inserttotalframenumber%
+    \hspace{1em}%
+  \end{beamercolorbox}%
+}
+
+% Progress bar in headline (teal, grows with each slide)
+\setbeamertemplate{headline}{%
+  \begin{beamercolorbox}[wd=\paperwidth, ht=2pt, dp=0pt]{aims-teal}%
+    \begin{tikzpicture}
+      \useasboundingbox (0,0) rectangle (\paperwidth, 2pt);
+      \pgfmathsetlength{\progressbarwidth}{\paperwidth * \insertframenumber / \inserttotalframenumber}
+      \fill[aims-teal] (0,0) rectangle (\progressbarwidth, 2pt);
+    \end{tikzpicture}%
+  \end{beamercolorbox}%
+}
+
+% Itemize bullets
+\setbeamertemplate{itemize item}{\small\color{aims-teal}$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{\small\color{aims-blue}--}
+\setbeamertemplate{enumerate item}{\color{aims-blue}\insertenumlabel.}
+
+% Title page
+\setbeamertemplate{title page}{%
+  \begin{center}
+    \vfill
+    {\usebeamerfont{title}\color{aims-blue}\inserttitle}\par
+    \vspace{0.4em}
+    {\large\color{aims-teal}\insertsubtitle}\par
+    \vspace{0.6em}
+    \textcolor{aims-teal}{\rule{5cm}{1pt}}\par
+    \vspace{0.6em}
+    {\normalsize\insertauthor}\par
+    \vspace{0.4em}
+    {\small\color{black!55}\insertinstitute}\par
+    \vspace{0.4em}
+    {\small\color{aims-blue}\insertdate}
+    \vfill
+  \end{center}%
+}
+
+% =============================================================================
+%  CODE LISTINGS
+% =============================================================================
+\lstdefinestyle{pycode}{
+  language=Python,
+  backgroundcolor=\color{code-bg},
+  basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\color{aims-blue}\bfseries,
+  stringstyle=\color{aims-green!80!black},
+  commentstyle=\color{black!45}\itshape,
+  identifierstyle=\color{black!85},
+  breaklines=true,
+  showstringspaces=false,
+  frame=single, framerule=0.4pt, rulecolor=\color{aims-blue!25},
+  xleftmargin=0.5em, xrightmargin=0.5em, framexleftmargin=0.4em,
+  aboveskip=0.3em, belowskip=0.2em,
+}
+\lstdefinestyle{shcode}{
+  language=bash,
+  backgroundcolor=\color{black!90},
+  basicstyle=\ttfamily\scriptsize\color{white!85},
+  breaklines=true, showstringspaces=false,
+  frame=none, xleftmargin=0.5em,
+  aboveskip=0.3em, belowskip=0.2em,
+}
+
+% =============================================================================
+%  HELPER MACROS
+% =============================================================================
+
+% Inline mono/code
+\newcommand{\code}[1]{{\ttfamily\small\color{code-red}#1}}
+
+% Teal highlight box (uses beamer block)
+\newenvironment{hlbox}{%
+  \begin{beamercolorbox}[rounded=true, sep=4pt, wd=\linewidth]{block body}%
+    \small}{%
+  \end{beamercolorbox}}
+
+% Amber note box
+\newenvironment{notebox}{%
+  \vspace{0.2em}%
+  \noindent\colorbox{yellow!18}\bgroup\parbox{\dimexpr\linewidth-2\fboxsep\relax}{\tiny\color{black!70}%
+}{%
+  \par}\egroup\vspace{0.1em}%
+}
+
+% Simpler note: \note{text}  (no environments)
+\newcommand{\sidenote}[1]{%
+  \vspace{0.2em}%
+  \noindent\colorbox{yellow!18}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep\relax}{\tiny\color{black!70}#1}%
+  }\vspace{0.1em}%
+}
+
+% Progress bar length register (used in headline template)
+\newlength{\progressbarwidth}
+
+% Score bar: \scorebar{label}{score 0.xx}{color}
+\newlength{\barlen}
+\newcommand{\scorebar}[3]{%
+  \pgfmathsetlength{\barlen}{#2 * \linewidth}%
+  \vspace{0.1em}%
+  {\tiny\color{black!60}#1}\par\vspace{-0.15em}%
+  \noindent\begin{tikzpicture}[baseline=0pt]
+    \fill[black!12] (0,0) rectangle (\linewidth, 5.5pt);
+    \fill[#3]       (0,0) rectangle (\barlen,    5.5pt);
+    \node[font=\tiny\bfseries\color{white}, anchor=west, inner sep=1.5pt]
+      at (2pt, 2.75pt) {#2};
+  \end{tikzpicture}\par\vspace{0.12em}%
+}
+
+% Stage card: \stagecard{border-color}{title}{body}
+\newlength{\cardw}
+\newcommand{\stagecard}[3]{%
+  \setlength{\cardw}{\dimexpr\linewidth - 8pt\relax}%
+  \vspace{0.18em}%
+  \noindent\begin{tikzpicture}
+    \node[fill=#1!7, draw=#1, line width=0.5pt, rounded corners=2pt,
+          text width=\cardw, inner xsep=5pt, inner ysep=4pt, align=left,
+          font=\small] {%
+      \textbf{\color{#1}#2}\\[0.1em]{\tiny\color{black!75}#3}};
+  \end{tikzpicture}\vspace{0.1em}%
+}
+
+% =============================================================================
+%  DOCUMENT INFO
+% =============================================================================
+\title{ML-ESS}
+\subtitle{Multi-Agent AI Research Assistant}
+\author{%
+  J.N.\ Mabiala \and S.\ Kargbo \and C.\ Akyeampong \and A.\ Akuetteh \and L. Bizimana%
+}
+\institute{%
+  African Institute for Mathematical Sciences --- Research Innovation Centre\\%
+  Doctoral Training School 2026%
+}
+\date{April 2026}
+
+% Image path
+\graphicspath{{../report/latex/imgs/}}
+
+% =============================================================================
+\begin{document}
+% =============================================================================
+
+% ── 1. Title ──────────────────────────────────────────────────────────────────
+\begin{frame}{ML-ESS --- Multi-Agent AI Research Assistant}
+  \titlepage
+\end{frame}
+
+% ── 2. Problem \& System Architecture ─────────────────────────────────────────
+\begin{frame}{Problem \& System Architecture}
+  \begin{columns}[T]
+    \column{0.36\textwidth}
+      \textbf{\color{aims-blue}The bottleneck}
+      \begin{itemize}
+        \item Manual research: hours of querying, reading, drafting
+        \item No reproducibility or quality scores
+      \end{itemize}
+      \vspace{0.5em}
+      \textbf{\color{aims-teal}ML-ESS automates it}
+      \begin{itemize}
+        \item One question in
+        \item Cited, scored report out
+        \item Web UI \textbullet\ REST API \textbullet\ Telegram
+      \end{itemize}
+      \vspace{0.5em}
+      \begin{hlbox}
+        \scriptsize FastAPI backend on Render; Next.js frontend on Vercel.
+        SQLite WAL for job persistence.
+      \end{hlbox}
+    \column{0.60\textwidth}
+      \begin{center}
+        \includegraphics[width=\linewidth, height=0.78\textheight, keepaspectratio]%
+          {report-rendered-1.png}
+      \end{center}
+  \end{columns}
+\end{frame}
+
+% ── 3. How It Works --- The Pipeline ──────────────────────────────────────────
+\begin{frame}{How It Works --- The Four-Agent Pipeline}
+  \begin{columns}[T]
+    \column{0.32\textwidth}
+      \vspace{0.3em}
+      \stagecard{aims-lblue}{Search Agent}{%
+        Generates queries, scrapes Tavily/DDG, extracts evidence triples.}
+      \stagecard{aims-green}{Synthesis Agent}{%
+        Groups evidence into themes; detects contradictions.}
+      \stagecard{aims-orange}{Report Agent}{%
+        Outline-first, then \textasciitilde2\,000-word cited Markdown report.}
+      \stagecard{aims-purple}{Evaluator}{%
+        Scores Coverage, Faithfulness, Hallucination, Usefulness.}
+    \column{0.64\textwidth}
+      \begin{center}
+        \includegraphics[width=\linewidth, height=0.82\textheight, keepaspectratio]%
+          {report-rendered-4.png}
+      \end{center}
+  \end{columns}
+\end{frame}
+
+% ── 4. Demo Results ───────────────────────────────────────────────────────────
+\begin{frame}{Demo Results}
+  \textbf{Question:} \emph{``What are the main trade-offs between CNNs and Vision
+  Transformers for medical imaging?''}
+  \vspace{0.4em}
+  \begin{columns}[T]
+    \column{0.32\textwidth}
+      \begin{block}{Search}
+        \centering\small
+        \textbf{3 queries \textbullet\ 14 sources}\\[0.2em]
+        {\tiny 47 evidence fragments extracted}
+      \end{block}
+    \column{0.32\textwidth}
+      \begin{block}{Synthesis}
+        \centering\small
+        \textbf{6 themes \textbullet\ 2 contradictions}\\[0.2em]
+        {\tiny Performance \textbullet\ Data efficiency \textbullet\ Interpretability \textbullet\ Hybrid models}
+      \end{block}
+    \column{0.32\textwidth}
+      \begin{block}{Report}
+        \centering\small
+        \textbf{\textasciitilde2\,100 words \textbullet\ 7 sections}\\[0.2em]
+        {\tiny Inline citations \textbullet\ Mermaid diagram \textbullet\ PDF export}
+      \end{block}
+  \end{columns}
+  \vspace{0.4em}
+  \scorebar{Coverage --- addresses the research question}{0.88}{aims-green}
+  \scorebar{Faithfulness --- claims backed by evidence}{0.90}{aims-lblue}
+  \scorebar{Hallucination rate \ (lower is better)}{0.12}{aims-red}
+  \scorebar{Usefulness --- decision-supportive quality}{0.85}{aims-purple}
+\end{frame}
+
+% ── 5. Conclusion \& Q\&A ─────────────────────────────────────────────────────
+\begin{frame}{Conclusion \& Questions}
+  \begin{columns}[T]
+    \column{0.50\textwidth}
+      \textbf{\color{aims-blue}What we built}
+      \begin{itemize}
+        \item 4-agent pipeline: Search → Synthesis → Report → Evaluate
+        \item FastAPI + SSE streaming + SQLite persistence
+        \item Next.js web UI, REST API, Telegram bot
+        \item Built-in 4-criterion quality rubric
+        \item Groq primary + HuggingFace fallback
+      \end{itemize}
+      \vspace{0.4em}
+      \begin{hlbox}
+        \scriptsize From one question to a scored, cited, reproducible report
+        --- automatically.
+      \end{hlbox}
+    \column{0.46\textwidth}
+      \begin{center}
+        \vfill
+        {\Large\bfseries\color{aims-blue}Thank you}\par
+        \vspace{0.5em}
+        {\normalsize\color{aims-teal}Questions?}\par
+        \vspace{0.6em}
+        \begin{tikzpicture}
+          \draw[aims-teal, line width=1pt] (0,0) -- (4.5cm,0);
+        \end{tikzpicture}\par
+        \vspace{0.6em}
+        {\small\color{black!55}
+          J.N.\ Mabiala \textbullet\ S.\ Kargbo\\
+          C.\ Akyeampong \textbullet\ A.\ Akuetteh \textbullet\ L.\ Bizimana\\[0.3em]
+          AIMS RIC \textbullet\ DTS 2026%
+        }
+        \vfill
+      \end{center}
+  \end{columns}
+\end{frame}
+
+\end{document}
